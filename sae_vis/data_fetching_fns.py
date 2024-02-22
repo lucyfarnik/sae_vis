@@ -442,7 +442,7 @@ def get_sequences_data(
     contribution_to_logprobs = orig_logits.log_softmax(dim=-1) - new_logits.log_softmax(dim=-1)
     acts_nonzero = feat_acts_group[:, :-1].abs() > 1e-5 # [g buf]
 
-    # Edge case handling — if the feature never fired, raise an error
+    # Edge case handling — if the feature never fired, efficient_topk would throw an error
     if not acts_nonzero.any():
         empty_tok_k = torch.zeros(*acts_nonzero.shape, 5)
         top5_contribution_to_logits = TopK((empty_tok_k, empty_tok_k))
